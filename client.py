@@ -28,7 +28,7 @@ class Client:
 
         self.loss_function = self.args.get_loss_function()()
         self.optimizer = optim.SGD(self.net.parameters(),
-            lr=self.args.get_learning_rate(),
+             lr=self.args.get_learning_rate(),
             momentum=self.args.get_momentum())
         self.scheduler = MinCapableStepLR(self.args.get_logger(), self.optimizer,
             self.args.get_scheduler_step_size(),

@@ -58,8 +58,7 @@ def detect_and_adjust_outliers(param_diff, worker_ids):
     # Find gradients that exceed the outlier threshold
     outliers_indices = np.where(z_scores > OUTLIER_THRESHOLD)[0]
 
-    print(len(outliers_indices))
-    exit(0)
+
 
     # Counter to keep track of removed blue crosses
     removed_blue_crosses = 0
