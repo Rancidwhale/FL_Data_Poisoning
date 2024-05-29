@@ -16,18 +16,18 @@ class Arguments:
     def __init__(self, logger):
         self.logger = logger
 
-        self.batch_size = 10
+        self.batch_size = 4
         self.test_batch_size = 1000
         self.epochs = 10
-        self.lr = 0.01
-        self.momentum = 0.5
+        self.lr = 0.001
+        self.momentum = 0.9
         self.cuda = True
         self.shuffle = False
         self.log_interval = 100
         self.kwargs = {}
 
-        self.scheduler_step_size = 50
-        self.scheduler_gamma = 0.5
+        self.scheduler_step_size = 10
+        self.scheduler_gamma = 0.1
         self.min_lr = 1e-10
 
         self.round_worker_selection_strategy = None
@@ -40,7 +40,7 @@ class Arguments:
         self.epoch_save_end_suffix = "end"
 
         self.num_workers = 50
-        self.num_poisoned_workers = 10
+        self.num_poisoned_workers = 5
 
         #self.net = Cifar10CNN
         self.net = FashionMNISTCNN

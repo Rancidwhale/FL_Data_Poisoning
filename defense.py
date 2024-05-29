@@ -32,11 +32,11 @@ CLASS_NUM = 4
 
 # The IDs for the poisoned workers. This needs to be manually filled out.
 # You can find this information at the beginning of an experiment's log file.
-POISONED_WORKER_IDS = [14, 12, 27, 6, 15, 3, 7, 36, 22, 28]
+POISONED_WORKER_IDS = [14, 1, 45, 26, 24, 31, 23, 34, 36, 15, 13,18,5, 11 ]
 
 
 # The resulting graph is saved to a file
-SAVE_NAME = "defense_results2.jpg"
+SAVE_NAME = "defense_results_300212.jpg"
 SAVE_SIZE = (18, 14)
 
 
@@ -53,9 +53,38 @@ def load_models(args, model_filenames):
 
 def plot_gradients_2d(gradients):
     fig = plt.figure()
+    flag1=1
+    flag2=1
+    flag3=1
+    flag4=1
 
     for (worker_id, gradient) in gradients:
         if worker_id in POISONED_WORKER_IDS:
+            if worker_id == 11:
+                if flag1:
+                    plt.scatter(gradient[0], gradient[1], color="blue", marker="x", s=1000, linewidth=5)
+                    flag1=0
+                else:
+                    continue
+            if worker_id == 5:
+                if flag2:
+                    plt.scatter(gradient[0], gradient[1], color="blue", marker="x", s=1000, linewidth=5)
+                    flag2=0
+                else:
+                    continue
+
+            if worker_id == 13:
+                if flag3:
+                    plt.scatter(gradient[0], gradient[1], color="blue", marker="x", s=1000, linewidth=5)
+                    flag3=0
+                else:
+                    continue
+            if worker_id == 18:
+                if flag4:
+                    plt.scatter(gradient[0], gradient[1], color="blue", marker="x", s=1000, linewidth=5)
+                    flag4=0
+                else:
+                    continue
             plt.scatter(gradient[0], gradient[1], color="blue", marker="x", s=1000, linewidth=5)
         else:
             plt.scatter(gradient[0], gradient[1], color="orange", s=180)
@@ -83,7 +112,8 @@ def detect_poisoned_workers(param_diff, worker_ids):
 
     # Identify poisoned workers
     poisoned_worker_ids = [worker_ids[i] for i, norm in enumerate(gradient_norms) if norm > anomaly_threshold]
-
+    print(poisoned_worker_ids)
+    #exit(0)
     return poisoned_worker_ids
 
 
@@ -99,7 +129,9 @@ if __name__ == '__main__':
 
     for epoch in EPOCHS:
         start_model_files = get_model_files_for_epoch(model_files, epoch)
+
         start_model_file = get_model_files_for_suffix(start_model_files, args.get_epoch_save_start_suffix())[0]
+
         start_model_file = os.path.join(MODELS_PATH, start_model_file)
         start_model = load_models(args, [start_model_file])[0]
 
@@ -114,12 +146,13 @@ if __name__ == '__main__':
             end_model = load_models(args, [end_model_file])[0]
 
             end_model_layer_param = list(get_layer_parameters(end_model.get_nn_parameters(), LAYER_NAME)[CLASS_NUM])
-
             gradient = calculate_parameter_gradients(logger, start_model_layer_param, end_model_layer_param)
+
             gradient = gradient.flatten()
 
             param_diff.append(gradient)
             worker_ids.append(worker_id)
+
 
     logger.info("Gradients shape: ({}, {})".format(len(param_diff), param_diff[0].shape[0]))
 
@@ -131,4 +164,6 @@ if __name__ == '__main__':
 
     logger.info("Dimensionally-reduced gradients shape: ({}, {})".format(len(dim_reduced_gradients), dim_reduced_gradients[0].shape[0]))
     #POISONED_WORKER_IDS=detect_poisoned_workers(param_diff,worker_ids)
+    #print(POISONED_WORKER_IDS)
+    #exit(0)
     plot_gradients_2d(zip(worker_ids, dim_reduced_gradients))

@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from DCGAN import Generator, Discriminator, train_gan
 
 def create_poisoned_fashion_mnist(target_label):
-    transform = transforms.Compose([transforms.ToTensor(), ...]) # Include any needed preprocessing
+    transform = transforms.Compose([transforms.ToTensor()])
     dataset = datasets.FashionMNIST(root='./data', train=True, transform=transform, download=True)
 
     poisoned_data = []
@@ -19,16 +19,7 @@ def create_poisoned_fashion_mnist(target_label):
 
 # Poison data using GAN
 def poison_data_with_GAN(logger, distributed_train_dataset, num_workers, poisoned_workers, target_label):
-    """
-    Poison data using GAN.
 
-    :param logger: Logger object for logging.
-    :param distributed_train_dataset: Distributed train dataset.
-    :param num_workers: Number of workers.
-    :param poisoned_workers: IDs of poisoned workers.
-    :param target_label: Target label for poisoning.
-    :return: Poisoned distributed train dataset.
-    """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Instantiate GAN models
@@ -49,6 +40,7 @@ def poison_data_with_GAN(logger, distributed_train_dataset, num_workers, poisone
     for worker_idx in range(num_workers):
         if worker_idx in poisoned_workers:
             # Flip labels in distributed_train_dataset for poisoned workers
-            distributed_train_dataset[worker_idx][1] = torch.where(distributed_train_dataset[worker_idx][1] == 1, 9, distributed_train_dataset[worker_idx][1])
+            distributed_train_dataset[worker_idx][1] = torch.where(distributed_train_dataset[worker_idx][1] == 1,9,
+                                                                   distributed_train_dataset[worker_idx][1])
 
     return distributed_train_dataset

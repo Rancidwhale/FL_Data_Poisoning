@@ -102,15 +102,15 @@ transform = transforms.Compose([
     transforms.Normalize((0.5,), (0.5,))
 ])
 
-# Load FashionMNIST dataset
-train_dataset = datasets.FashionMNIST(root='./data', train=True, transform=transform, download=True)
-
-# Define GAN
-latent_dim = 100
-image_channels = 1
-hidden_dim = 64
-gan = Generator(latent_dim=latent_dim, image_channels=image_channels, hidden_dim=hidden_dim), Discriminator(image_channels=image_channels, hidden_dim=hidden_dim)
-
-# Train GAN
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-train_gan(gan, train_dataset, epochs=10, device=device)
+# # Load FashionMNIST dataset
+# train_dataset = datasets.FashionMNIST(root='./data', train=True, transform=transform, download=True)
+#
+# # Define GAN
+# latent_dim = 100
+# image_channels = 1
+# hidden_dim = 64
+# gan = Generator(latent_dim=latent_dim, image_channels=image_channels, hidden_dim=hidden_dim), Discriminator(image_channels=image_channels, hidden_dim=hidden_dim)
+#
+# # Train GAN
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# train_gan(gan, train_dataset, epochs=10, device=device)

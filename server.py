@@ -12,7 +12,7 @@ from federated_learning.utils import load_test_data_loader
 from federated_learning.utils import generate_experiment_ids
 from federated_learning.utils import convert_results_to_csv
 from client import Client
-from poison_GAN import poison_data_with_GAN
+from federated_learning.utils.poison_GAN import poison_data_with_GAN
 
 def train_subset_of_clients(epoch, args, clients, poisoned_workers):
     """
